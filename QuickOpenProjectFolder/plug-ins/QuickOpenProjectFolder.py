@@ -7,7 +7,7 @@ def maya_useNewAPI():
     pass
 
 class OpenFolderCmd(om.MPxCommand):
-    kPluginCmdName = "openFolder"
+    kPluginCmdName = "openFolderInfo"
     def __init__(self):
         om.MPxCommand.__init__(self)
 
@@ -19,7 +19,11 @@ class OpenFolderCmd(om.MPxCommand):
         self.redoIt()
 
     def redoIt(self):
-        test()
+        project_info = get_project_info()
+        print('現在のプロジェクト: ' + project_info[0])
+        print('プロジェクト内のフォルダ: ')
+        for i in range(len(project_info)-1):
+            print(project_info[i+1])
 
 def initializePlugin(plugin):
     vendor = "Kakoi Keisuke"
@@ -52,47 +56,48 @@ def uninitializePlugin(plugin):
 
 def create_ui():
     global job
-    job = cmds.scriptJob(event=['workspaceChanged', update_ui()])
 
+    job = cmds.scriptJob(event=['workspaceChanged', update_ui])
+    update_ui()
+
+def delete_ui():
+    if job is not None and cmds.scriptJob(exists=job):
+        cmds.scriptJob(kill=job)
+    if cmds.menu('ProjectFolder', exists=True):
+        cmds.deleteUI('ProjectFolder')
+
+def update_ui():
     project_info = get_project_info()
-
     main_window = mel.eval('$gmw = $gMainWindow')
     if cmds.menu('ProjectFolder', exists=True):
         cmds.deleteUI('ProjectFolder')
 
     project_name = os.path.basename(os.path.normpath(project_info[0]))
 
-    custom_menu = cmds.menu('ProjectFolder', parent=main_window, label=project_name, tearOff=True)
+    custom_menu = cmds.menu(
+        'ProjectFolder',
+        parent=main_window,
+        label='<' + project_name + '>',
+        tearOff=False)
 
-    for i in range(len(project_info)-1):
-        folder_name = os.path.basename(os.path.normpath(project_info[i+1]))
+    cmds.menuItem(
+        label=project_name,
+        parent=custom_menu,
+        annotation='プロジェクトフォルダのルート (' + project_name + ') を開きます。'
+    )
+    for i in range(len(project_info) - 1):
+        folder_name = os.path.basename(os.path.normpath(project_info[i + 1]))
         cmds.menuItem(
             label=folder_name,
             parent=custom_menu,
-            command='実行コマンド',
-            image='アイコンパス',
-            annotation=project_info[i+1] + ' を開きます。'
+            # command='実行コマンド',
+            # image='アイコンパス',
+            annotation='フォルダ ' + project_info[i + 1] + ' を開きます。'
         )
-
-def delete_ui():
-    if cmds.scriptJob(exists=job):
-        cmds.scriptJob(kill=job)
-    if cmds.menu('ProjectFolder', exists=True):
-        cmds.deleteUI('ProjectFolder')
-
-def update_ui():
-    delete_ui()
-    create_ui()
-
-def test():
-    print('これでどう？')
 
 def get_project_info():
     project_info = []
     project_path = cmds.workspace(query=True, rootDirectory=True)
-    # project_name = os.path.basename(
-    #     os.path.normpath(project_path)
-    # )
     project_info.append(project_path)
     all_item = os.listdir(project_path)
     for i in range(len(all_item)):
