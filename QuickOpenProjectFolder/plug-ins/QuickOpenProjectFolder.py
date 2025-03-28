@@ -88,7 +88,6 @@ def update_ui():
     cmds.menuItem(
         label=project_name,
         parent=custom_menu,
-        # command=lambda x: subprocess.Popen(['explorer', full_path_list[0]]),
         command=lambda x: open_folder(full_path_list[0]),
         image='QuickOpenProjectFolder_root.svg',
         annotation='プロジェクトのルートフォルダ ( ' + project_name + ' ) を開きます。'
@@ -100,7 +99,6 @@ def update_ui():
             cmds.menuItem(
                 label=folder_name,
                 parent=custom_menu,
-                # command=lambda x, idx=path_index: subprocess.Popen(['explorer', full_path_list[idx]]),
                 command=lambda x, idx=path_index: open_folder(full_path_list[idx]),
                 image='QuickOpenProjectFolder_child_bottom.svg',
                 annotation='フォルダ ' + project_info[i + 1] + ' を開きます。'
@@ -109,7 +107,6 @@ def update_ui():
             cmds.menuItem(
                 label=folder_name,
                 parent=custom_menu,
-                # command=lambda x, idx=path_index: subprocess.Popen(['explorer', full_path_list[idx]]),
                 command=lambda x, idx=path_index: open_folder(full_path_list[idx]),
                 image='QuickOpenProjectFolder_child.svg',
                 annotation='フォルダ ' + project_info[i + 1] + ' を開きます。'
@@ -137,19 +134,21 @@ def get_full_path_list(project_info):
     for i in range(len(project_info)):
         if i == 0:
             full_path = project_info[i]
-            full_path = format(full_path.replace('/', '\\'))
         else:
             full_path = os.path.join(project_info[0], project_info[i])
-            full_path = format(full_path.replace('/', '\\'))
         full_path_list.append(full_path)
     return full_path_list
 
 def open_folder(path):
-    if platform.system() == 'Windows':
-        subprocess.Popen(['explorer', path])
-    elif platform.system() == 'Darwin':
-        subprocess.Popen('open', path)
-    elif platform.system() == 'Linux':
-        subprocess.Popen('xdg-open', path)
-    else:
-        cmds.error('フォルダを開けませんでした。対応していないOSです。')
+    try:
+        path = os.path.normpath(path)
+        if platform.system() == 'Windows':
+            subprocess.Popen(['explorer', path])
+        elif platform.system() == 'Darwin':
+            subprocess.Popen(['open', path])
+        elif platform.system() == 'Linux':
+            subprocess.Popen(['xdg-open', path])
+        else:
+            cmds.error('フォルダを開けませんでした。対応していないOSです。')
+    except:
+        cmds.error('フォルダを開く際にエラーが発生しました。')
