@@ -10,7 +10,7 @@ def maya_useNewAPI():
     pass
 
 class OpenFolderCmd(om.MPxCommand):
-    kPluginCmdName = "openFolderInfo"
+    kPluginCmdName = "quickOpenProjectFolder"
     def __init__(self):
         om.MPxCommand.__init__(self)
 
@@ -22,11 +22,27 @@ class OpenFolderCmd(om.MPxCommand):
         self.redoIt()
 
     def redoIt(self):
+        update_ui()
+
+        if platform.system() == 'Windows':
+            os_name = 'Windows'
+        elif platform.system() == 'Darwin':
+            os_name = 'macOS'
+        elif platform.system() == 'Linux':
+            os_name = 'Linux'
+        else:
+            os_name = '不明（非対応）'
+        print('認識したOS: ' + os_name)
+
         project_info = get_project_info()
         print('現在のプロジェクト: ' + project_info[0])
-        print('プロジェクト内のフォルダ: ')
-        for i in range(len(project_info)-1):
-            print(project_info[i+1])
+        all_folder_name = ''
+        for i in range(len(project_info) - 1):
+            if i == len(project_info) - 2:
+                all_folder_name += project_info[i + 1]
+            else:
+                all_folder_name += project_info[i + 1] + ', '
+        print('プロジェクト内のフォルダ: ' + all_folder_name)
 
 def initializePlugin(plugin):
     vendor = "Kakoi Keisuke"
