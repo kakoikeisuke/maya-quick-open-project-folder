@@ -1,5 +1,7 @@
 # Quick Open Project Folder
-プロジェクトフォルダーに素早くアクセスできるメニューを追加するMayaプラグインモジュールです。
+プロジェクトフォルダーに素早くアクセスできるメニューを追加するMayaプラグインモジュールです。  
+
+![](/README_resource/screenshot.png)
 ## インストール
 「QuickOpenProjectFolder.mod」ファイルと「QuickOpenProjectFolder」フォルダがzipファイルに圧縮されています。  
 MAYA_MODULE_PATHに登録された同一ディレクトリ内に「QuickOpenProjectFolder.mod」ファイルと「QuickOpenProjectFolder」フォルダを配置することで, Mayaプラグインモジュールとして認識できるようになります。  
