@@ -20,7 +20,7 @@ C:\Users\username\Documents\maya\projects\sampleProject
 メニューの項目名, メニュー内のフォルダリストは以下のタイミングで更新されます。
 - プラグインがロードされたとき
 - プロジェクトフォルダが変更されたとき
-- コマンド ( MEL: quickOpenProjectFolder, Python: cmds.quickOpenProjectFolder ) で呼び出されたとき
+- コマンド ( quickOpenProjectFolder ) で呼び出されたとき
 - メニューアイテムから「再読み込み」が実行されたとき
 ## 動作確認環境
 Windows 11 Pro 24H2  
