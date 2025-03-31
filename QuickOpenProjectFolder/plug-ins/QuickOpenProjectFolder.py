@@ -156,8 +156,10 @@ def get_full_path_list(project_info):
     return full_path_list
 
 def open_folder(path):
+    path = os.path.normpath(path)
+    if not os.path.exists(path):
+        cmds.error(f'指定したフォルダ({path})は存在していません。再読み込みを実行してください。')
     try:
-        path = os.path.normpath(path)
         if platform.system() == 'Windows':
             subprocess.Popen(['explorer', path])
         elif platform.system() == 'Darwin':
