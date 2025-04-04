@@ -46,7 +46,7 @@ class OpenFolderCmd(om.MPxCommand):
 
 def initializePlugin(plugin):
     vendor = "Kakoi Keisuke"
-    version = "1.0.0"
+    version = "1.1.0"
     pluginFn = om.MFnPlugin(plugin, vendor, version)
 
     try:
@@ -158,7 +158,7 @@ def get_full_path_list(project_info):
 def open_folder(path):
     path = os.path.normpath(path)
     if not os.path.exists(path):
-        cmds.error(f'指定したフォルダ({path})は存在していません。再読み込みを実行してください。')
+        cmds.error(f'指定されたフォルダ({path})は存在しません。再読み込みを実行してください。')
     try:
         if platform.system() == 'Windows':
             subprocess.Popen(['explorer', path])
