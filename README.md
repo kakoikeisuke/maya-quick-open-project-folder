@@ -7,9 +7,8 @@
 `MAYA_MODULE_PATH`に登録された同一ディレクトリ内に`QuickOpenProjectFolder.mod`ファイルと`QuickOpenProjectFolder`フォルダを配置することで, Mayaプラグインモジュールとして認識できるようになります。  
 この状態でMaya内のプラグインマネージャからロードすることが可能です。
 ## 使用方法
-このプラグインがロードされると, Mayaのメニューに「▶プロジェクト名」の項目が追加されます。  
+このプラグインがロードされると, Mayaのメニューに`▶プロジェクト名`の項目が追加されます。  
 
-例  
 プロジェクトフォルダが  
 ```
 C:\Users\username\Documents\maya\projects\sampleProject
