@@ -1,0 +1,33 @@
+{
+  "jp_JP": {
+    "unknown_os": "不明 (非対応)",
+    "detected_os": "認識したOS",
+    "current_project": "現在のプロジェクト: ",
+    "folders_in_project": "プロジェクト内のフォルダ: ",
+    "command_registration_failure": "コマンドの登録に失敗しました",
+
+    "menu_creation_failure": "メニューの作成に失敗しました",
+    "command_deregister_failure": "コマンドの除去に失敗しました",
+    "menu_deletion_failure": "メニューの削除に失敗しました",
+    "root_folder_annotation": "プロジェクトのルートフォルダを開きます",
+
+    "reload_annotation": "プロジェクトフォルダ直下のフォルダを再検索し, リストを更新します",
+    "folder_not_exists": "指定されたフォルダは存在しません",
+    "open_folder_failure": "フォルダを開けませんでした"
+  },
+  "en_US": {
+    "unknown_os": "Unknown (Unsupported)",
+    "detected_os": "Detected OS",
+    "current_project": "Current Project: ",
+    "folder_in_project": "Folders in Project: ",
+    "command_registration_failure": "Failed to register command",
+    "menu_creation_failure": "Failed to create menu",
+    "command_deregister_failure": "Failed to deregister command",
+    "menu_deletion_failure": "Failed to delete menu",
+    "root_folder_annotation": "Opens the project's root folder",
+
+    "reload_annotation": "Rescans folders directly under the project folder and updates the list",
+    "folder_not_exists": "The specified folder does not exist",
+    "open_folder_failure": "Failed to open folder"
+  }
+}

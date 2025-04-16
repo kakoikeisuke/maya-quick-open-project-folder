@@ -55,6 +55,10 @@ def initializePlugin(plugin):
         )
     except:
         cmds.error('コマンドの登録に失敗しました。')
+
+    global language
+    language = cmds.about(uiLanguage=True)
+
     try:
         create_ui()
     except:
@@ -158,7 +162,7 @@ def get_full_path_list(project_info):
 def open_folder(path):
     path = os.path.normpath(path)
     if not os.path.exists(path):
-        cmds.error(f'指定されたフォルダ({path})は存在しません。再読み込みを実行してください。')
+        cmds.error(f'指定されたフォルダ({path})は存在しません。')
     try:
         if platform.system() == 'Windows':
             subprocess.Popen(['explorer', path])
@@ -167,6 +171,6 @@ def open_folder(path):
         elif platform.system() == 'Linux':
             subprocess.Popen(['xdg-open', path])
         else:
-            cmds.error('フォルダを開けませんでした。対応していないOSです。')
+            cmds.error('フォルダを開けませんでした。')
     except:
         cmds.error('フォルダを開く際にエラーが発生しました。')
