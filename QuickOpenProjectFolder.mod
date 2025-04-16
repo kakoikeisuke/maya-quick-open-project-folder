@@ -1,1 +1,1 @@
-+ QuickOpenProjectFolder 1.1.0 QuickOpenProjectFolder
++ QuickOpenProjectFolder 1.2.0 QuickOpenProjectFolder

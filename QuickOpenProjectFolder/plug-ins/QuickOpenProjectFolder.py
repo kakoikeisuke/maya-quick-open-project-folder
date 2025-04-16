@@ -48,7 +48,7 @@ class OpenFolderCmd(om.MPxCommand):
 
 def initializePlugin(plugin):
     vendor = "Kakoi Keisuke"
-    version = "1.1.0"
+    version = "1.2.0"
     pluginFn = om.MFnPlugin(plugin, vendor, version)
     get_message()
 
