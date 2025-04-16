@@ -30,4 +30,4 @@ Maya本体が`ja_JP`の場合は日本語, それ以外の場合 (`en_US`, `zh_C
 ## 動作確認環境
 Windows 11 Pro 24H2  
 Autodesk Maya 2025.3 (Python 3.11.4) (ja_JP, en_US)  
-Autodesk Maya 2026 (Python 3.11.9) (ja_Jp, en_US)
+Autodesk Maya 2026 (Python 3.11.9) (ja_JP, en_US)
