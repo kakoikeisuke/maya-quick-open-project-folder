@@ -1,6 +1,8 @@
 import os
 import platform
 import subprocess
+import json
+from pathlib import Path
 
 import maya.cmds as cmds
 import maya.mel as mel
@@ -31,38 +33,35 @@ class OpenFolderCmd(om.MPxCommand):
         elif platform.system() == 'Linux':
             os_name = 'Linux'
         else:
-            os_name = '不明（非対応）'
-        print('認識したOS: ' + os_name)
+            os_name = message[language]["unknown_os"]
+        print(message[language]["detected_os"] + os_name)
 
         project_info = get_project_info()
-        print('現在のプロジェクト: ' + project_info[0])
+        print(message[language]["current_project"] + project_info[0])
         all_folder_name = ''
         for i in range(len(project_info) - 1):
             if i == len(project_info) - 2:
                 all_folder_name += project_info[i + 1]
             else:
                 all_folder_name += project_info[i + 1] + ', '
-        print('プロジェクト内のフォルダ: ' + all_folder_name)
+        print(message[language]["folders_in_project"] + all_folder_name)
 
 def initializePlugin(plugin):
     vendor = "Kakoi Keisuke"
     version = "1.1.0"
     pluginFn = om.MFnPlugin(plugin, vendor, version)
+    get_message()
 
     try:
         pluginFn.registerCommand(
             OpenFolderCmd.kPluginCmdName, OpenFolderCmd.cmdCreator
         )
     except:
-        cmds.error('コマンドの登録に失敗しました。')
-
-    global language
-    language = cmds.about(uiLanguage=True)
-
+        cmds.error(message[language]["command_registration_failure"])
     try:
         create_ui()
     except:
-        cmds.error('メニューの作成に失敗しました。')
+        cmds.error(message[language]["menu_creation_failure"])
 
 def uninitializePlugin(plugin):
     pluginFn = om.MFnPlugin(plugin)
@@ -71,11 +70,24 @@ def uninitializePlugin(plugin):
             OpenFolderCmd.kPluginCmdName
         )
     except:
-        cmds.error('コマンドの除去に失敗しました')
+        cmds.error(message[language]["command_deregister_failure"])
     try:
         delete_ui()
     except:
-        cmds.error('メニューの削除に失敗しました。')
+        cmds.error(message[language]["menu_deletion_failure"])
+
+def get_message():
+    global language
+    language = cmds.about(uiLanguage=True)
+    if language == 'ja_JP':
+        pass
+    else:
+        language = 'en_US'
+    module_path = Path(cmds.getModulePath(moduleName='QuickOpenProjectFolder'))
+    message_json_path = module_path / 'i18n' / 'message.json'
+    json_open = open(message_json_path, 'r', encoding='utf-8')
+    global message
+    message = json.load(json_open)
 
 def create_ui():
     global job
@@ -110,7 +122,7 @@ def update_ui():
         parent=custom_menu,
         command=lambda x: open_folder(full_path_list[0]),
         image='QuickOpenProjectFolder_root.svg',
-        annotation='プロジェクトのルートフォルダ ( ' + project_name + ' ) を開きます。'
+        annotation=message[language]["root_folder_annotation"]
     )
     for i in range(len(project_info) - 1):
         folder_name = os.path.basename(os.path.normpath(project_info[i + 1]))
@@ -121,7 +133,7 @@ def update_ui():
                 parent=custom_menu,
                 command=lambda x, idx=path_index: open_folder(full_path_list[idx]),
                 image='QuickOpenProjectFolder_child_bottom.svg',
-                annotation='フォルダ ' + project_info[i + 1] + ' を開きます。'
+                annotation=message[language]["folder_annotation"]
             )
         else:
             cmds.menuItem(
@@ -129,14 +141,14 @@ def update_ui():
                 parent=custom_menu,
                 command=lambda x, idx=path_index: open_folder(full_path_list[idx]),
                 image='QuickOpenProjectFolder_child.svg',
-                annotation='フォルダ ' + project_info[i + 1] + ' を開きます。'
+                annotation=message[language]["folder_annotation"]
             )
     cmds.menuItem(
-        label='再読み込み',
+        label=message[language]["reload_menu"],
         parent=custom_menu,
         command=lambda x: update_ui(),
         image='QuickOpenProjectFolder_reload.svg',
-        annotation='プロジェクトフォルダ直下のフォルダを再検索し, リストを更新します。'
+        annotation=message[language]["reload_annotation"]
     )
 
 def get_project_info():
@@ -162,7 +174,7 @@ def get_full_path_list(project_info):
 def open_folder(path):
     path = os.path.normpath(path)
     if not os.path.exists(path):
-        cmds.error(f'指定されたフォルダ({path})は存在しません。')
+        cmds.error(message[language]["folder_not_exists"])
     try:
         if platform.system() == 'Windows':
             subprocess.Popen(['explorer', path])
@@ -171,6 +183,6 @@ def open_folder(path):
         elif platform.system() == 'Linux':
             subprocess.Popen(['xdg-open', path])
         else:
-            cmds.error('フォルダを開けませんでした。')
+            cmds.error(message[language]["open_folder_failure"])
     except:
-        cmds.error('フォルダを開く際にエラーが発生しました。')
+        cmds.error(message[language]["open_folder_failure"])
